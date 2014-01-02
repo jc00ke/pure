@@ -95,7 +95,7 @@ prompt_pure_precmd() {
   (( ${PURE_GIT_PULL:-1} )) && {
     # check if we're in a git repo
     command git rev-parse --is-inside-work-tree &>/dev/null &&
-    # check check if there is anything to pull
+    # check if there is anything to pull
     command git fetch &>/dev/null &&
     # check if there is an upstream configured for this branch
     command git rev-parse --abbrev-ref @'{u}' &>/dev/null &&
