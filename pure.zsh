@@ -63,6 +63,24 @@ prompt_pure_string_length() {
   echo ${#${(S%%)1//(\%([KF1]|)\{*\}|\%[Bbkf])}}
 }
 
+
+prompt_pure_branch_color() {
+  branch=$(git rev-parse --abbrev-ref HEAD | head -n 1)
+  case "$branch" in
+    master)
+      color="red"
+      ;;
+    staging)
+      color="yellow"
+      ;;
+    *)
+      color="green"
+      ;;
+  esac
+  echo "%F{$color}"
+}
+
+
 prompt_pure_precmd() {
   # shows the full path in the title
   print -Pn '\e]0;%~\a'
@@ -70,7 +88,7 @@ prompt_pure_precmd() {
   # git info
   vcs_info
 
-  local prompt_pure_preprompt='\n%F{blue}%~%F{242}$vcs_info_msg_0_`prompt_pure_git_dirty` $prompt_pure_username%f %F{yellow}`prompt_pure_cmd_exec_time`%f'
+  local prompt_pure_preprompt='\n%F{blue}%~`prompt_pure_branch_color`$vcs_info_msg_0_`prompt_pure_git_dirty` $prompt_pure_username%f %F{yellow}`prompt_pure_cmd_exec_time`%f'
   print -P $prompt_pure_preprompt
 
   # check async if there is anything to pull
@@ -106,7 +124,7 @@ prompt_pure_setup() {
 
   zstyle ':vcs_info:*' enable git
   zstyle ':vcs_info:git*:*' get-revision true
-  zstyle ':vcs_info:git*' formats " %b | %7.7i"
+  zstyle ':vcs_info:git*' formats " %b%f | %7.7i"
   zstyle ':vcs_info:git*' actionformats ' %b|%a'
 
   # show username@host if logged in through SSH
