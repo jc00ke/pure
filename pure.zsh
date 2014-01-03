@@ -65,6 +65,9 @@ prompt_pure_string_length() {
 
 
 prompt_pure_branch_color() {
+  # check if we're in a git repo
+  command git rev-parse --is-inside-work-tree &>/dev/null || return
+
   branch=$(git rev-parse --abbrev-ref HEAD | head -n 1)
   case "$branch" in
     master)
